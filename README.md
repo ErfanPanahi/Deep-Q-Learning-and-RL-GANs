@@ -90,3 +90,64 @@ Furthermore, the following image also demonstrates a comparison of the model's o
 
 
 **Part 2: Implementation of the Connect4 game using Deep Q-Learning**
+
+![image](https://github.com/ErfanPanahi/Deep-Q-Learning-and-RL-GANs/assets/107314081/494f7e04-d0c8-4f12-a1bb-460db445be93)
+
+In this section, we intend to become acquainted with the topic of Deep Q-Learning and utilize this approach to implement the Connect 4 game. To this end, we will begin by providing a brief explanation of Deep Q-Learning and the neural networks employed within it. Subsequently, we will elaborate on the relevant loss function required for the network.
+
+![image](https://github.com/ErfanPanahi/Deep-Q-Learning-and-RL-GANs/assets/107314081/9e607a95-f60e-4ff7-bffe-baa878da32b6)
+
+**Design and Function of Deep Neural Networks in Optimal Action Prediction:** As mentioned, we use a neural network to determine the best possible move in each situation. This means that we feed the network with a state and obtain a move from it. The network's weights are updated after each game round, regardless of victory or defeat, using stored information. This information includes the following:
+
+1- The game board before making a move.
+2- The selected move.
+3- The reward for making the move.
+
+We store this information for each move in the game and update the network with it at the end of the round. To achieve this, we define a class, and after each move, we add its information to it. Finally, after the round concludes and the network is updated, we clear the class.
+
+For updating, we use the Sparse Cross Entropy cost function. To do so, we utilize the network's outputs and the received rewards to calculate the cost function value. Then, in the Back Propagation phase, we obtain the gradients of the weights for each layer. Ultimately, using the Adam optimizer, we update (optimize) the weight values.
+
+Using the above instructions, we implement a neural network for reinforcement learning. Now we want to analyze the results of this implementation.
+
+To observe the learning progress of the network, we plot two graphs.
+
+1. Winning Rate Graph: In this graph, we depict the number of victories up to each episode.
+
+2. Average Reward Graph: In this graph, the cumulative reward received up to each episode is plotted. (The smoothing() function has been utilized for better visualization of the graph.)
+
+Reward or Penalty Policy: In this game, we consider a reward of +50 for a victory, a penalty of -50 for each defeat, and a reward/penalty of 1 or -1 for each move. For determining the reward or penalty for each move, we have two strategies:
+
+1. If we consider a reward of +1 for each move, the game becomes longer, and the number of game states that the network is trained on increases.
+
+2. If we consider a penalty of -1 for each move, we take into account the aspect that the Agent wins the game faster during the learning process.
+
+We consider both high-reward strategies and train the network with both of them.
+
+Network Architecture: For the network architecture, we have two approaches. We can use a regular multi-layer network with ReLU activation functions. Additionally, we can start with a few convolutional layers. Regarding the inclusion of Dropout, Batch-Normalization, or Max-Pooling, we decide based on trial and error.
+
+![image](https://github.com/ErfanPanahi/Deep-Q-Learning-and-RL-GANs/assets/107314081/75060d34-bc44-4fa7-a261-f177a936edd2)
+
+![image](https://github.com/ErfanPanahi/Deep-Q-Learning-and-RL-GANs/assets/107314081/bffb1764-3878-4b36-92c7-59c41608c98a)
+
+![image](https://github.com/ErfanPanahi/Deep-Q-Learning-and-RL-GANs/assets/107314081/7e8cf99a-ff4c-4d9c-abbf-e3ac59a07ced)
+
+![image](https://github.com/ErfanPanahi/Deep-Q-Learning-and-RL-GANs/assets/107314081/951f617f-4921-47bd-b45f-381e28099a4e)
+
+*The chart pertains to the learning of the network using the first strategy (reward of +1 for each move):*
+
+![image](https://github.com/ErfanPanahi/Deep-Q-Learning-and-RL-GANs/assets/107314081/18070bbb-ada5-4b53-bf91-acddbb796db8)
+
+*The chart pertains to the learning of the network using the second strategy (reward of -1 for each move):*
+
+![image](https://github.com/ErfanPanahi/Deep-Q-Learning-and-RL-GANs/assets/107314081/447bd1be-cb83-4933-92a1-6732fd9c361c)
+
+**Results Analysis:** As seen in the above images, when we use a penalty of -1 for each move, the learning speed increases. Additionally, for the convolutional network, we observe higher accuracy (more victories). In order to increase the number of victories and approach a 100% win rate, we can utilize a deeper network. However, this will make the learning of such a network more time-consuming.
+
+**Troubleshooting and Solution for Improvement:** By observing several rounds of the game, we realize that the Agent relies on a single strategy and doesn't pay much attention to the opponent's moves. Therefore, it would be better to increase the reward for winning beyond the penalty for losing. For this purpose, we consider a reward of +20 for winning, a penalty of -100 for losing, and a penalty of -1 for each move.
+
+*The chart pertains to the learning of a network using an improved strategy (win reward +20, loss penalty -100, and penalty for each move -1):*
+
+![image](https://github.com/ErfanPanahi/Deep-Q-Learning-and-RL-GANs/assets/107314081/d3457b1f-32b9-4fb1-969a-834981d20e53)
+
+
+
